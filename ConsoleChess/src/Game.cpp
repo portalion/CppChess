@@ -3,14 +3,17 @@
 
 void Game::handleInput()
 {
+	std::cin >> this->inGame;
 }
 
-void Game::draw()
+void Game::draw() const
 {
+	chessBoard.draw();
 }
 
 void Game::update()
 {
+	std::cout << "UPDATING...\n";
 }
 
 Game::Game()

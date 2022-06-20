@@ -8,6 +8,7 @@ void Game::handleInput()
 
 void Game::draw() const
 {
+	system("cls");
 	chessBoard.draw();
 }
 

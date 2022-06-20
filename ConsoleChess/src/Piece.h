@@ -1,11 +1,12 @@
 #pragma once
+#include <unordered_map>
 
 enum class PieceId
 {
 	None = 0,
 	Pawn = 1,
-	Knight = 2,
-	Bishop = 3,
+	Bishop = 2,
+	Knight = 3,
 	Rook = 4,
 	Queen = 5,
 	King = 6,
@@ -15,12 +16,16 @@ enum class PieceId
 class Piece
 {
 private:
+	//Constants
+	static const std::unordered_map<PieceId, char> pieceAbbr;
+
 	bool isWhite;
 	PieceId id;
 
 public:
-	Piece();
-	Piece(PieceId id, bool isWhite);
+	Piece(PieceId id = PieceId::None, bool isWhite = false);
+	void setPiece(PieceId piece = PieceId::None, bool isWhite = false);
+
 	void draw() const;
 };
 

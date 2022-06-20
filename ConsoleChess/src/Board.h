@@ -10,6 +10,8 @@ private:
 	std::vector<std::vector<Piece>> pieces;
 public:
 	Board();
+	void setNewBoard();
+
 	void draw() const;
 };
 

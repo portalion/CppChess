@@ -1,7 +1,7 @@
 #include "Board.h"
 
 Board::Board()
-	:pieces(size, std::vector<Piece>(size))
+	:pieces(size, std::vector<Piece>(size)), asWhite(true)
 {
 	setNewBoard();
 }
@@ -30,43 +30,66 @@ void Board::setNewBoard()
 	}
 }
 
+void Board::swapColors()
+{
+	this->asWhite = !this->asWhite;
+}
+
+static void writeBoardLine(const unsigned int& boardSize);
+static void writeBoardLetters(const unsigned int& boardSize, const bool& isWhite);
+static void writeBoardNumer(const unsigned int& numerToWrite, const unsigned int& boardSize, const bool& isWhite);
+
 void Board::draw() const
 {
-	std::cout << "   ";
-	for (unsigned int i = 0; i < this->size; i++)
-		std::cout << "   " << i + 1 << "  ";
-	std::cout << '\n';
+	writeBoardLetters(this->size, this->asWhite);
 	for (unsigned int j = 0; j < this->size; j++)
 	{
-		std::cout << "   ";
-		for (unsigned int i = 0; i < this->size; i++) std::cout << "------";
-		std::cout << "-\n";
-
-		//std::cout << " " << static_cast<char>('a' + i) << " ";
+		writeBoardLine(this->size);
 
 		for (unsigned int i = 0; i < 3; i++)
 		{
-			if (i == 1) std::cout << ' ' << static_cast<char>('A' + j) << ' ';
+			if (i == 1) writeBoardNumer(j, this->size, this->asWhite);
 			else std::cout << "   ";
 			for (unsigned int k = 0; k < this->size; k++)
 			{
 				std::cout << "|  ";
-				if (i == 1)pieces[j][k].draw();
+				if (i == 1)pieces[asWhite ? j : this->size - j - 1][asWhite ? k : this->size - k - 1].draw();
 				else std::cout << ' ';
 				std::cout <<"  ";
 			}
-			
-			if (i == 1)std::cout << "| " << static_cast<char>('A' + j) << '\n';
-			else std::cout << "|\n";
+			std::cout << '|';
+			if (i == 1) writeBoardNumer(j, this->size, this->asWhite);
+			std::cout << '\n';
 		}
 		
 	}
-	std::cout << "   ";
-	for (unsigned int i = 0; i < this->size; i++) std::cout << "------";
-	std::cout << "-\n";
+	writeBoardLine(this->size);
+	writeBoardLetters(this->size, this->asWhite);
+}
 
+void writeBoardLine(const unsigned int& boardSize)
+{
 	std::cout << "   ";
-	for (unsigned int i = 0; i < this->size; i++)
-		std::cout << "   " << i + 1 << "  ";
+	for (unsigned int i = 0; i < boardSize; i++) std::cout << "------";
+	std::cout << "-\n";
+}
+
+void writeBoardLetters(const unsigned int& boardSize, const bool& isWhite)
+{
+	std::cout << "   ";
+	for (unsigned int i = 0; i < boardSize; i++)
+	{
+		std::cout << "   ";
+		std::cout << static_cast<char>(isWhite ? 'A' + i : 'A' + boardSize - i - 1);
+		std::cout << "  ";
+	}
 	std::cout << '\n';
+}
+
+void writeBoardNumer(const unsigned int& numerToWrite, const unsigned int& boardSize, const bool& isWhite)
+{
+	std::cout << ' ';
+	if (!isWhite)std::cout << numerToWrite + 1;
+	else std::cout << boardSize - numerToWrite;
+	std::cout << ' ';
 }

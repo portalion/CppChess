@@ -1,5 +1,6 @@
 #pragma once
 #include <unordered_map>
+#include "Console.h"
 
 enum class PieceId
 {
@@ -12,6 +13,8 @@ enum class PieceId
 	King = 6,
 	Size = (static_cast<int>(King) + 1)
 };
+
+
 
 class Piece
 {
@@ -27,6 +30,6 @@ public:
 	Piece(PieceId id = PieceId::None, bool isWhite = false);
 	void setPiece(PieceId piece = PieceId::None, bool isWhite = false);
 
-	void draw() const;
+	void draw(const Console::Color& background = Console::Color::None) const;
 };
 

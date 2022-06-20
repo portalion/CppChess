@@ -23,10 +23,10 @@ void Piece::setPiece(PieceId piece, bool isWhite)
 	this->isWhite = isWhite;
 }
 
-void Piece::draw() const
+void Piece::draw(const Console::Color& background) const
 {
-	Console::setColor(this->isWhite ? Console::Color::White : Console::Color::Black);
+	Console::setColor(this->isWhite ? Console::Color::White : Console::Color::Black, background);
 	std::cout << pieceAbbr.at(this->id);
 	
-	Console::resetToDefault();
+	Console::setColor(Console::Color::Default, background);
 }

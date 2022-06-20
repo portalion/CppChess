@@ -19,6 +19,7 @@ private:
 	//Constants
 	static const std::unordered_map<PieceId, char> pieceAbbr;
 
+	//Variables
 	bool isWhite;
 	PieceId id;
 

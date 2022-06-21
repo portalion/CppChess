@@ -45,3 +45,10 @@ public:
 	BishopMove(unsigned int posX, unsigned int posY, unsigned int boardSize, bool isWhite);
 	std::vector<std::pair<unsigned int, unsigned int>> getPossibleMoves(const std::vector<std::vector<Piece>>& pieces) const override;
 };
+
+class QueenMove : public Move
+{
+public:
+	QueenMove(unsigned int posX, unsigned int posY, unsigned int boardSize, bool isWhite);
+	std::vector<std::pair<unsigned int, unsigned int>> getPossibleMoves(const std::vector<std::vector<Piece>>& pieces) const override;
+};

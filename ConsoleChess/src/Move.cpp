@@ -133,6 +133,26 @@ std::vector<std::pair<unsigned int, unsigned int>> BishopMove::getPossibleMoves(
 	return result;
 }
 
+QueenMove::QueenMove(unsigned int posX, unsigned int posY, unsigned int boardSize, bool isWhite)
+	:Move(posX, posY, boardSize, isWhite)
+{
+}
+
+std::vector<std::pair<unsigned int, unsigned int>> QueenMove::getPossibleMoves(const std::vector<std::vector<Piece>>& pieces) const
+{
+	std::vector<std::pair<unsigned int, unsigned int>> result;
+	std::vector<std::pair<unsigned int, unsigned int>> tmp;
+
+	BishopMove bishop(posX, posY, boardSize, isWhite);
+	RookMove rook(posX, posY, boardSize, isWhite);
+
+	tmp = rook.getPossibleMoves(pieces);
+	result = bishop.getPossibleMoves(pieces);
+	result.insert(result.end(), tmp.begin(), tmp.end());
+
+	return result;
+}
+
 static void checkMoves(bool& up, bool& down, bool& left, bool& right, const bool& isWhite,
 	const std::unordered_map<Direction, std::pair<unsigned int, unsigned int>>& toCheck,
 	std::vector < std::pair<unsigned int, unsigned int>>& result,

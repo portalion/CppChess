@@ -1,6 +1,5 @@
 #include "Piece.h"
 #include <iostream>
-#include "Console.h"
 
 const std::unordered_map<PieceId, char> Piece::pieceAbbr = {
 	std::make_pair(PieceId::None, ' '),

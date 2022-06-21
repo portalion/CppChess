@@ -12,6 +12,30 @@ std::string Move::getMoveNames(const std::vector<std::vector<Piece>>& pieces) co
 	return "";
 }
 
+Move* Move::getMove(const PieceId& id, unsigned int posX, unsigned int posY, unsigned int boardSize, bool isWhite)
+{
+	Move* result = nullptr;
+	switch (id)
+	{
+	case PieceId::Pawn:
+		result = new PawnMove(posX, posY, boardSize, isWhite);
+		break;
+	case PieceId::Rook:
+		result = new RookMove(posX, posY, boardSize, isWhite);
+		break;
+	case PieceId::Bishop:
+		result = new BishopMove(posX, posY, boardSize, isWhite);
+		break;
+	case PieceId::King:
+		result = new KingMove(posX, posY, boardSize, isWhite);
+		break;
+	case PieceId::Queen:
+		result = new QueenMove(posX, posY, boardSize, isWhite);
+		break;
+	}
+	return result;
+}
+
 PawnMove::PawnMove(unsigned int posX, unsigned int posY, unsigned int boardSize, bool isWhite)
 	:Move(posX, posY, boardSize, isWhite)
 {

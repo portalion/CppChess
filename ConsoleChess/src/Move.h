@@ -3,6 +3,7 @@
 #include <string>
 
 class Piece;
+enum class PieceId;
 
 class Move
 {
@@ -16,6 +17,8 @@ public:
 
 	virtual std::vector<std::pair<unsigned int, unsigned int>> getPossibleMoves(const std::vector<std::vector<Piece>>& pieces) const = 0;
 	virtual std::string getMoveNames(const std::vector<std::vector<Piece>>& pieces) const;//TODO
+
+	static Move* getMove(const PieceId& id, unsigned int posX, unsigned int posY, unsigned int boardSize, bool isWhite);
 };
 
 class PawnMove : public Move

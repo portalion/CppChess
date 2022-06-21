@@ -8,9 +8,7 @@ Board::Board()
 	setNewBoard();
 	chosenX = 4;
 	chosenY = 4;
-	Move* tmp = new QueenMove(chosenX, chosenY, size, true);
-	possibleMoves = tmp->getPossibleMoves(pieces);
-	delete tmp;
+	
 }
 
 void Board::setNewBoard()
@@ -88,6 +86,13 @@ void Board::draw() const
 	}
 	writeBoardLine(this->size);
 	writeBoardLetters(this->size, this->asWhite);
+}
+
+void Board::update()
+{
+	Move* tmp = Move::getMove(pieces[chosenY][chosenX].getId(), chosenX, chosenY, size, true);
+	if(tmp)possibleMoves = tmp->getPossibleMoves(pieces);
+	delete tmp;
 }
 
 void writeBoardLine(const unsigned int& boardSize)

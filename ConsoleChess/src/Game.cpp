@@ -15,6 +15,7 @@ void Game::draw() const
 void Game::update()
 {
 	std::cout << "UPDATING...\n";
+	chessBoard.update();
 }
 
 Game::Game()

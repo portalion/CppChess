@@ -22,6 +22,7 @@ public:
 	void setNewBoard();
 	void swapColors();
 
+	void update();
 	void draw() const;
 };
 

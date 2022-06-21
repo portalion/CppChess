@@ -1,9 +1,16 @@
 #include "Board.h"
+#include "Console.h"
+
 
 Board::Board()
 	:pieces(size, std::vector<Piece>(size)), asWhite(true)
 {
 	setNewBoard();
+	chosenX = 4;
+	chosenY = 4;
+	Move* tmp = new RookMove(chosenX, chosenY, size, true);
+	possibleMoves = tmp->getPossibleMoves(pieces);
+	delete tmp;
 }
 
 void Board::setNewBoard()
@@ -35,30 +42,46 @@ void Board::swapColors()
 	this->asWhite = !this->asWhite;
 }
 
+Console::Color Board::getFieldBackground(const unsigned int& posX, const unsigned int& posY)const
+{
+	bool youCanMoveThere = std::find(this->possibleMoves.begin(), this->possibleMoves.end(), std::make_pair(posX, posY)) != this->possibleMoves.end();
+	if (chosenX == posX && chosenY == posY) return Console::Color::Aqua;
+	else if (youCanMoveThere && pieces[posY][posX].getId() != PieceId::None)return Console::Color::Red;
+	else if (youCanMoveThere) return Console::Color::Yellow;
+	return Console::Color::None;
+}
+
 static void writeBoardLine(const unsigned int& boardSize);
 static void writeBoardLetters(const unsigned int& boardSize, const bool& isWhite);
-static void writeBoardNumer(const unsigned int& numerToWrite, const unsigned int& boardSize, const bool& isWhite);
+static void writeBoardNumber(const unsigned int& numerToWrite, const unsigned int& boardSize, const bool& isWhite);
 
 void Board::draw() const
 {
 	writeBoardLetters(this->size, this->asWhite);
-	for (unsigned int j = 0; j < this->size; j++)
+	for (unsigned int yIndex = 0; yIndex < this->size; yIndex++)
 	{
 		writeBoardLine(this->size);
 
 		for (unsigned int i = 0; i < 3; i++)
 		{
-			if (i == 1) writeBoardNumer(j, this->size, this->asWhite);
+			if (i == 1) writeBoardNumber(yIndex, this->size, this->asWhite);
 			else std::cout << "   ";
-			for (unsigned int k = 0; k < this->size; k++)
+			for (unsigned int xIndex = 0; xIndex < this->size; xIndex++)
 			{
-				std::cout << "|  ";
-				if (i == 1)pieces[asWhite ? j : this->size - j - 1][asWhite ? k : this->size - k - 1].draw();
+				std::cout << '|';
+
+				Console::Color background = getFieldBackground(xIndex, yIndex);
+				Console::setColor(Console::Color::Default, background);
+
+				std::cout << "  ";
+				if (i == 1)pieces[asWhite ? yIndex : this->size - yIndex - 1][asWhite ? xIndex : this->size - xIndex - 1].draw(background);
 				else std::cout << ' ';
 				std::cout <<"  ";
+
+				Console::resetToDefault();
 			}
 			std::cout << '|';
-			if (i == 1) writeBoardNumer(j, this->size, this->asWhite);
+			if (i == 1) writeBoardNumber(yIndex, this->size, this->asWhite);
 			std::cout << '\n';
 		}
 		
@@ -86,7 +109,7 @@ void writeBoardLetters(const unsigned int& boardSize, const bool& isWhite)
 	std::cout << '\n';
 }
 
-void writeBoardNumer(const unsigned int& numerToWrite, const unsigned int& boardSize, const bool& isWhite)
+void writeBoardNumber(const unsigned int& numerToWrite, const unsigned int& boardSize, const bool& isWhite)
 {
 	std::cout << ' ';
 	if (!isWhite)std::cout << numerToWrite + 1;

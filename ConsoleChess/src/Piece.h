@@ -23,12 +23,14 @@ private:
 	static const std::unordered_map<PieceId, char> pieceAbbr;
 
 	//Variables
-	bool isWhite;
+	bool white;
 	PieceId id;
 
 public:
 	Piece(PieceId id = PieceId::None, bool isWhite = false);
 	void setPiece(PieceId piece = PieceId::None, bool isWhite = false);
+	const PieceId& getId() const;
+	bool isWhite() const;
 
 	void draw(const Console::Color& background = Console::Color::None) const;
 };

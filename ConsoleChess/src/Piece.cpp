@@ -13,19 +13,29 @@ const std::unordered_map<PieceId, char> Piece::pieceAbbr = {
 };
 
 Piece::Piece(PieceId id, bool isWhite)
-	:id(id), isWhite(isWhite)
+	:id(id), white(isWhite)
 {
 }
 
 void Piece::setPiece(PieceId piece, bool isWhite)
 {
 	this->id = piece;
-	this->isWhite = isWhite;
+	this->white = isWhite;
+}
+
+const PieceId& Piece::getId() const
+{
+	return this->id;
+}
+
+bool Piece::isWhite() const
+{
+	return white;
 }
 
 void Piece::draw(const Console::Color& background) const
 {
-	Console::setColor(this->isWhite ? Console::Color::White : Console::Color::Black, background);
+	Console::setColor(this->white ? Console::Color::White : Console::Color::Black, background);
 	std::cout << pieceAbbr.at(this->id);
 	
 	Console::setColor(Console::Color::Default, background);

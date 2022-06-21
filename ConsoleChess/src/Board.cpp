@@ -8,7 +8,7 @@ Board::Board()
 	setNewBoard();
 	chosenX = 4;
 	chosenY = 4;
-	Move* tmp = new RookMove(chosenX, chosenY, size, true);
+	Move* tmp = new BishopMove(chosenX, chosenY, size, true);
 	possibleMoves = tmp->getPossibleMoves(pieces);
 	delete tmp;
 }

@@ -70,6 +70,11 @@ enum class Direction
 	right = 3
 };
 
+static void checkMoves(bool& up, bool& down, bool& left, bool& right, const bool& isWhite,
+	const std::unordered_map<Direction, std::pair<unsigned int, unsigned int>>& toCheck,
+	std::vector < std::pair<unsigned int, unsigned int>>& result,
+	const std::vector<std::vector<Piece>>& pieces);
+
 std::vector<std::pair<unsigned int, unsigned int>> RookMove::getPossibleMoves(const std::vector<std::vector<Piece>>& pieces) const
 {
 	std::vector<std::pair<unsigned int, unsigned int>> result;
@@ -91,31 +96,71 @@ std::vector<std::pair<unsigned int, unsigned int>> RookMove::getPossibleMoves(co
 
 		if (toCheck.empty()) return result;
 
-		for (const auto& position : toCheck)
-		{
-			const Piece& field = pieces[position.second.second][position.second.first];
-			if (field.getId() != PieceId::None)
-			{
-				if (field.isWhite() != isWhite)result.emplace_back(position.second);
-
-				switch (position.first)
-				{
-				case Direction::up:
-					up = false;
-					break;
-				case Direction::down:
-					down = false;
-					break;
-				case Direction::left:
-					left = false;
-					break;
-				case Direction::right:
-					right = false;
-					break;
-				}
-			}
-			else result.emplace_back(position.second);
-		}
+		checkMoves(up, down, left, right, isWhite, toCheck, result, pieces);
 	}
 	return result;
+}
+
+BishopMove::BishopMove(unsigned int posX, unsigned int posY, unsigned int boardSize, bool isWhite)
+	:Move(posX, posY, boardSize, isWhite)
+{
+}
+
+std::vector<std::pair<unsigned int, unsigned int>> BishopMove::getPossibleMoves(const std::vector<std::vector<Piece>>& pieces) const
+{
+	std::vector<std::pair<unsigned int, unsigned int>> result;
+	result.reserve(14);
+	bool up = true, down = true, left = true, right = true;
+	for (unsigned int i = 1; i < boardSize; i++)
+	{
+		std::unordered_map<Direction, std::pair<unsigned int, unsigned int>> toCheck;
+
+		if (posX + i >= boardSize || posY + i >= boardSize) right = false;
+		if (posX - i >= boardSize || posY - i >= boardSize) left = false;
+		if (posY - i >= boardSize || posX + i >= boardSize) down = false;
+		if (posY + i >= boardSize || posX - i >= boardSize) up = false;
+
+		if (right) toCheck[Direction::right] = { posX + i, posY + i};
+		if (left) toCheck[Direction::left] = { posX - i, posY - i };
+		if (up) toCheck[Direction::up] = { posX - i, posY + i };
+		if (down) toCheck[Direction::down] = { posX + i, posY - i };
+
+		if (toCheck.empty()) return result;
+
+		checkMoves(up, down, left, right, isWhite, toCheck, result, pieces);
+		
+	}
+	return result;
+}
+
+static void checkMoves(bool& up, bool& down, bool& left, bool& right, const bool& isWhite,
+	const std::unordered_map<Direction, std::pair<unsigned int, unsigned int>>& toCheck,
+	std::vector < std::pair<unsigned int, unsigned int>>& result,
+	const std::vector<std::vector<Piece>>& pieces)
+{
+	for (const auto& position : toCheck)
+	{
+		const Piece& field = pieces[position.second.second][position.second.first];
+		if (field.getId() != PieceId::None)
+		{
+			if (field.isWhite() != isWhite)result.emplace_back(position.second);
+
+			switch (position.first)
+			{
+			case Direction::up:
+				up = false;
+				break;
+			case Direction::down:
+				down = false;
+				break;
+			case Direction::left:
+				left = false;
+				break;
+			case Direction::right:
+				right = false;
+				break;
+			}
+		}
+		else result.emplace_back(position.second);
+	}
 }

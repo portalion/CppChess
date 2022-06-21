@@ -25,12 +25,12 @@ std::vector<std::pair<unsigned int, unsigned int>> PawnMove::getPossibleMoves(co
 
 	if (posY == 0) return result;
 	if (posY == boardSize - 2 && !isSomethingAhead && pieces[posY - 2][posX].getId() == PieceId::None) 
-		result.push_back(std::make_pair(posX, posY - 2));
-	if (!isSomethingAhead) result.push_back(std::make_pair(posX, posY - 1));
+		result.emplace_back(posX, posY - 2);
+	if (!isSomethingAhead) result.emplace_back(posX, posY - 1);
 	if (posY != 0 && posX != 0 && pieces[posY - 1][posX - 1].getId() != PieceId::None && pieces[posY - 1][posX - 1].isWhite() != isWhite)
-		result.push_back(std::make_pair(posX - 1, posY - 1));
+		result.emplace_back(posX - 1, posY - 1);
 	if (posY != 0 && posX != boardSize - 1 && pieces[posY - 1][posX + 1].getId() != PieceId::None && pieces[posY - 1][posX + 1].isWhite() != isWhite)
-		result.push_back(std::make_pair(posX + 1, posY - 1));
+		result.emplace_back(posX + 1, posY - 1);
 	return result;
 }
 
@@ -50,8 +50,8 @@ std::vector<std::pair<unsigned int, unsigned int>> KingMove::getPossibleMoves(co
 		{
 			if (posY + j < 0 || posX + j >= boardSize)continue;
 			const Piece& toCheck = pieces[posY + j][posX + i];
-			if (toCheck.getId() == PieceId::None) result.push_back(std::make_pair(posX + i, posY + j));
-			else if (toCheck.isWhite() != isWhite) result.push_back(std::make_pair(posX + i, posY + j));
+			if (toCheck.getId() == PieceId::None) result.emplace_back(posX + i, posY + j);
+			else if (toCheck.isWhite() != isWhite) result.emplace_back(posX + i, posY + j);
 		}
 	}
 	return result;
@@ -96,7 +96,7 @@ std::vector<std::pair<unsigned int, unsigned int>> RookMove::getPossibleMoves(co
 			const Piece& field = pieces[position.second.second][position.second.first];
 			if (field.getId() != PieceId::None)
 			{
-				if (field.isWhite() != isWhite)result.push_back(position.second);
+				if (field.isWhite() != isWhite)result.emplace_back(position.second);
 
 				switch (position.first)
 				{
@@ -114,7 +114,7 @@ std::vector<std::pair<unsigned int, unsigned int>> RookMove::getPossibleMoves(co
 					break;
 				}
 			}
-			else result.push_back(position.second);
+			else result.emplace_back(position.second);
 		}
 	}
 	return result;
